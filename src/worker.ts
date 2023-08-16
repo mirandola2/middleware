@@ -11,15 +11,14 @@ export interface Env {
 	  if (pathname === "/totem") {
 		// If you did not use `DB` as your binding name, change it here
 		const { results } = await env.DB.prepare(
-		  "SELECT * FROM Customers WHERE CompanyName = ?"
+		  "SELECT * FROM totem"
 		)
-		  .bind("Bs Beverages")
 		  .all();
 		return Response.json(results);
 	  }
   
 	  return new Response(
-		"Call /totem to see everyone who works at Bs Beverages"
+		"Call /totem to get all the totems"
 	  );
 	},
   };
