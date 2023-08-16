@@ -11,7 +11,7 @@ export interface Env {
 	  if (pathname === "/totem") {
 		// If you did not use `DB` as your binding name, change it here
 		const { results } = await env.DB.prepare(
-		  "SELECT * FROM totem"
+		  "SELECT name, totem, location, year FROM totem order by year, name"
 		)
 		  .all();
 		return Response.json(results);
