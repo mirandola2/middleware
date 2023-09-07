@@ -7,6 +7,13 @@ export interface Env {
   export default {
 	async fetch(request: Request, env: Env) {
 	  const { pathname } = new URL(request.url);
+
+	  const corsHeaders = {
+		"Access-Control-Allow-Origin": "*",
+		"Access-Control-Allow-Methods": "GET, OPTIONS",
+		"Access-Control-Allow-Headers": "*",
+	  }
+	  
   
 	  if (pathname === "/totem") {
 		// If you did not use `DB` as your binding name, change it here
@@ -14,7 +21,9 @@ export interface Env {
 		  "SELECT name, totem, location, year FROM totem order by year, name"
 		)
 		  .all();
-		return Response.json(results);
+		return new Response(JSON.stringify(results), {headers: corsHeaders})
+		
+		
 	  }
   
 	  return new Response(
@@ -22,3 +31,13 @@ export interface Env {
 	  );
 	},
   };
+
+
+
+
+
+
+
+
+
+  
