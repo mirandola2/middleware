@@ -6,7 +6,12 @@ export interface Env {
 
 export default {
 	async fetch(request: Request, env: Env) {
-		const { pathname } = new URL(request.url);
+		const { pathname, searchParams } = new URL(request.url);
+
+		const queryParams: { [key: string]: string } = {};
+		for (const [key, value] of searchParams.entries()) {
+		queryParams[key] = value;
+		}
 
 		const corsHeaders = {
 			'Access-Control-Allow-Origin': '*',
@@ -22,9 +27,13 @@ export default {
 
 		if (pathname === '/data') {
 			// If you did not use `DB` as your binding name, change it here
-			const fiscal_code = getQueryParameters(new URL(request.url))['id']
+			const fiscal_code = queryParams['id']
 			const { results } = await env.DB.prepare('SELECT member_code FROM data WHERE fiscal_code=?').bind(fiscal_code).all();
-			return new Response(JSON.stringify(results), { headers: corsHeaders });
+			var listOfCodes:String[] = [];
+			results.forEach(element => {
+				listOfCodes.push(String(element?.member_code))
+			});
+			return new Response(JSON.stringify(listOfCodes), { headers: corsHeaders });
 		}
 
 		return new Response('Call /totem to retrieve all the totems. \nCall /data?id=XYZ to obtain the member code of the person whose fiscal code corresponds to XYZ.');
@@ -32,10 +41,3 @@ export default {
 };
 
 
-function getQueryParameters(url: URL): { [key: string]: string } {
-	const queryParams: { [key: string]: string } = {};
-	for (const [key, value] of url.searchParams.entries()) {
-	  queryParams[key] = value;
-	}
-	return queryParams;
-  }
