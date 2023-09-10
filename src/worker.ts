@@ -28,12 +28,9 @@ export default {
 		if (pathname === '/data') {
 			// If you did not use `DB` as your binding name, change it here
 			const fiscal_code = queryParams['id'];
-			const { results } = await env.DB.prepare('SELECT member_code FROM data WHERE fiscal_code=?').bind(fiscal_code).all();
-			var listOfCodes: String[] = [];
-			results.forEach((element) => {
-				listOfCodes.push(String(element?.member_code));
-			});
-			return new Response(JSON.stringify(listOfCodes), { headers: corsHeaders });
+			const { results } = await env.DB.prepare('SELECT full_name as name, member_code as code, birthday FROM data WHERE lower(fiscal_code)=lower(?)').bind(fiscal_code).all();
+			
+			return new Response(JSON.stringify(results), { headers: corsHeaders });
 		}
 
 		if (pathname === '/birthday') {
