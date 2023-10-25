@@ -1,6 +1,8 @@
 .prettierrc
 .editorconfig
 .wrangler
+dati.csv
+schema.sql
 
 # Logs
 logs

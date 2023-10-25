@@ -27,8 +27,7 @@ export default {
 
 		if (pathname === '/data') {
 			// If you did not use `DB` as your binding name, change it here
-			const fiscal_code = queryParams['id'];
-			const { results } = await env.DB.prepare('SELECT full_name as name, member_code as code, birthday FROM data WHERE lower(fiscal_code)=lower(?)').bind(fiscal_code).all();
+			const { results } = await env.DB.prepare('SELECT full_name as name, member_code as code, birthday FROM data WHERE lower(name)=lower(?)').bind(decodeURIComponent(queryParams['name'])).all();
 			
 			return new Response(JSON.stringify(results), { headers: corsHeaders });
 		}
@@ -44,7 +43,7 @@ export default {
 		}
 
 		return new Response(
-			'Call /totem to retrieve all the totems. \nCall /data?id=XYZ to obtain the member code of the person whose fiscal code corresponds to XYZ.\nCall /birthday to get the names of the people that have a birthday in the current week and the days until that date (t-minus).'
+			'Call /totem to retrieve all the totems. \nCall /data?name=XYZ to obtain the member code of the person whose full name corresponds to XYZ (uri encoded).\nCall /birthday to get the names of the people that have a birthday in the current week and the days until that date (t-minus).'
 		);
 	},
 };
