@@ -36,7 +36,7 @@ export default {
 			// If you did not use `DB` as your binding name, change it here
 
 			const { results } = await env.DB.prepare(
-				"SELECT full_name as name, strftime('%j', birthday) - strftime('%j', 'now', 'localtime') AS t_minus FROM data WHERE strftime('%m-%d', birthday) >= strftime('%m-%d', 'now', 'localtime' ) AND strftime('%m-%d', birthday) <= strftime('%m-%d', 'now', 'localtime', '+7 days') ORDER BY strftime('%m-%d', birthday) ASC, full_name;"
+				"SELECT full_name as name, strftime('%m-%d', birthday) as bd, strftime('%j', birthday) - strftime('%j', 'now') AS t_minus FROM data WHERE strftime('%m-%d', birthday) >= strftime('%m-%d', 'now', 'localtime' ) AND strftime('%m-%d', birthday) <= strftime('%m-%d', 'now', 'localtime', '+7 days') ORDER BY strftime('%m-%d', birthday) ASC, full_name;"
 			).all();
 
 			return new Response(JSON.stringify(results), { headers: corsHeaders });

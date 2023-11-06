@@ -17,7 +17,7 @@ Per fetchare il middleware si deve fare riferimento all'indirizzo [people.mirand
 |-|-|-|
 |`/totem`| Ritorna un json contenente una lista di dizionari comporta da tutti i totem. | |
 |`/data`| Ritorna un json contente i dati di una persona - richiede come input il codice fiscale | &id=XYZ
-|`/birthday`| Ritorna un json contentente chi e quando (conto alla rovescia in giorni) eventualmente compierà gli anni  nei seguenti i 7 giorni. | |
+|`/birthday`| Ritorna un json contentente chi e quando (conto alla rovescia in giorni [oggi = 1]!) eventualmente compierà gli anni  nei seguenti i 7 giorni. | |
 
 
 ## Database
