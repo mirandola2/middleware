@@ -36,19 +36,34 @@ export default {
 			// If you did not use `DB` as your binding name, change it here
 
 			const dayRange = Number(queryParams["t"]) || 7
+						
+			// Get the timezone from Cloudflare
+			const timezone = "Europe/Rome"
+
+			// Create a localized date in the specified timezone
+			let localizedDate = new Date(
+				new Date().toLocaleString("en-US", { timeZone: timezone })
+			);
+			console.log(localizedDate)
+
+			// Get the Unix epoch time for the localized date
+			const localizedUnixEpoch = Math.floor(localizedDate.getTime() / 1000); // Convert to seconds
+
+			// Now use this Unix epoch in the SQL query
 			const { results } = await env.DB.prepare(
 				`SELECT full_name as name,
-					strftime('%m-%d', birthday, 'localtime') as bd,
+					strftime('%m-%d', birthday) as bd,
 					CASE 
-						WHEN (strftime('%j', birthday, 'localtime') - strftime('%j', 'now', 'localtime')) < 0 
-						THEN (strftime('%j', birthday, 'localtime') - strftime('%j', 'now', 'localtime')) + 365
-						ELSE (strftime('%j', birthday, 'localtime') - strftime('%j', 'now', 'localtime'))
+						WHEN (strftime('%j', birthday) - strftime('%j', ?, 'unixepoch')) < 0 
+						THEN (strftime('%j', birthday) - strftime('%j', ?, 'unixepoch')) + 365
+						ELSE (strftime('%j', birthday) - strftime('%j', ?, 'unixepoch'))
 					END AS t_minus 
 				FROM data 
 				WHERE t_minus BETWEEN 0 AND ?
 				ORDER BY t_minus ASC, full_name;`
-			).bind(dayRange).all();
-						
+			).bind(localizedUnixEpoch, localizedUnixEpoch, localizedUnixEpoch, dayRange).all();
+
+									
 			
 			return new Response(JSON.stringify(results), { headers: corsHeaders });
 		}
