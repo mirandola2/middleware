@@ -26,10 +26,29 @@ export default {
 		}
 
 		if (pathname === '/data') {
+			const PRESHARED_AUTH_HEADER_KEY = "Just-A-PSK";
+			const PRESHARED_AUTH_HEADER_VALUE = env.token_coca;
+			const psk = request.headers.get(PRESHARED_AUTH_HEADER_KEY);
+
+			const { createHash } = await import('node:crypto');
+
+			  
+			const hash = createHash('sha256');
+			hash.update(PRESHARED_AUTH_HEADER_VALUE);
+			
+
+			console.log(request.headers)
+			console.log(PRESHARED_AUTH_HEADER_VALUE)
+			
+			if (psk === hash.digest('hex')){
 			// If you did not use `DB` as your binding name, change it here
 			const { results } = await env.DB.prepare('SELECT full_name as name, member_code as code, birthday FROM data WHERE lower(name)=lower(?)').bind(decodeURIComponent(queryParams['name'])).all();
-			
 			return new Response(JSON.stringify(results), { headers: corsHeaders });
+			}
+
+			return new Response(JSON.stringify({}), { headers: corsHeaders, status: 403 });
+
+
 		}
 
 		if (pathname === '/birthday') {
