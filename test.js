@@ -15,9 +15,9 @@ hash.update('testpsk');
 function sendPostRequest() {
 
   const options = {
-    hostname: 'localhost',
-    port: 60911,
-    path: '/data?name=giacomo%20salici',
+    hostname: 'people.mirandola2.workers.dev', //or localhost
+    //port: 60911,
+    path: '/data?name=name%20surname',
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

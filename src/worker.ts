@@ -6,6 +6,11 @@ export interface Env {
 
 export default {
 	async fetch(request: Request, env: Env) {
+		// Check if this is a CORS preflight request
+		if (request.method === 'OPTIONS') {
+			return handleOptions(request)
+		}
+
 		const { pathname, searchParams } = new URL(request.url);
 
 		const queryParams: { [key: string]: string } = {};
@@ -15,8 +20,8 @@ export default {
 
 		const corsHeaders = {
 			'Access-Control-Allow-Origin': '*',
-			'Access-Control-Allow-Methods': 'GET, OPTIONS',
-			'Access-Control-Allow-Headers': '*',
+			'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+			'Access-Control-Allow-Headers': 'Content-Type, Just-A-PSK',
 		};
 
 		if (pathname === '/totem') {
@@ -94,3 +99,15 @@ export default {
 		);
 	},
 };
+
+function handleOptions(request) {
+	return new Response(null, {
+	  status: 204,
+	  headers: {
+		'Access-Control-Allow-Origin': '*',
+		'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 
+		'Access-Control-Allow-Headers': 'Content-Type, Just-A-PSK',
+		'Access-Control-Max-Age': '86400'
+	  }
+	})
+  }
