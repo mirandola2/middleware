@@ -17,7 +17,7 @@ Per _fetchare_ il middleware si deve fare riferimento all'indirizzo [people.mira
 |-|-|-|
 |`/totem`| Ritorna un json contenente una lista di dizionari comporta da tutti i totem. | - |
 |`/data`| Ritorna un json contente i dati di una persona. Richiede come input il nome della persona, e come header la `psk` (preshared key) di autenticazione (maggiori info più avanti) | `name=XYZ`, [obbligatorio] dove XYZ è il nome della persona URL-encoded. 
-|`/birthday`| Ritorna un json contentente chi e quando (`tminus` conto alla rovescia in giorni) eventualmente compierà gli anni  nei seguenti i 7 giorni. |  |
+|`/birthday`| Ritorna un json contentente chi e quando (`tminus` conto alla rovescia in giorni) eventualmente compierà gli anni  nei seguenti i `t` giorni. | `d=001` [facoltativo, default giorno attuale nella timezone del server] giorno dell'anno per cui si vuole fare la query; `t=7` [facoltativo,default 7] numero di giorni da considerare |
 
 ### Autenticazione 🔐
 
