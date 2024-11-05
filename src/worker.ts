@@ -76,14 +76,15 @@ export default {
 
 			// Now use this Unix epoch in the SQL query
 			const { results } = await env.DB.prepare(
-				`SELECT full_name AS name,
+				`SELECT SUBSTR(full_name, 1, INSTR(full_name, ' ') - 1) AS name,
 						strftime('%d-%m', birthday) AS bd,
 						strftime('%j', strftime('%Y-', 'now')||strftime('%m-%d', birthday)) AS jd,
 						CASE 
 							WHEN (strftime('%j', strftime('%Y-', 'now')||strftime('%m-%d', birthday)) - ?) < 0 
 								THEN (strftime('%j', strftime('%Y-', 'now')||strftime('%m-%d', birthday)) - ? + ?)
 							ELSE (strftime('%j', strftime('%Y-', 'now')||strftime('%m-%d', birthday)) - ?)
-						END AS t_minus
+						END AS t_minus,
+						strftime('%Y', 'now') - strftime('%Y', birthday) as age
 				FROM data 
 				WHERE t_minus BETWEEN 0 AND ?
 				ORDER BY t_minus ASC, full_name;`
