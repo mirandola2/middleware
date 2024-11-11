@@ -77,6 +77,7 @@ export default {
 			// Now use this Unix epoch in the SQL query
 			const { results } = await env.DB.prepare(
 				`SELECT SUBSTR(full_name, 1, INSTR(full_name, ' ') - 1) AS name,
+						substr(trim(full_name), instr(trim(full_name), ' ') + 1, 1) AS last_initial,
 						strftime('%d-%m', birthday) AS bd,
 						strftime('%j', strftime('%Y-', 'now')||strftime('%m-%d', birthday)) AS jd,
 						CASE 
